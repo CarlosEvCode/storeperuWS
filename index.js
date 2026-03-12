@@ -60,6 +60,40 @@ app.get('/productos',(req,res)=>{
     })
     /* res.send({'proceso': 'GET'}) */
 })
+app.post('/marcas',(req,res)=>{
+    //Y los datos que queremos guardar? - DESERIALIZACION
+    const {nombreM} = req.body
+    //? = comodin, evita ataques por SQLinjection
+    const sql = "INSERT INTO productos (nombreM) VALUES (?)"
+
+    db.query(sql,[nombreM],(err,results) =>{
+        if(err) return res.status(500).send({
+            success:false,
+            message: 'No se concretó el registro'
+        })
+
+        //Qué hacemos cuando logramos registrar?
+        res.send({
+            success: true,
+            message: 'Nuevo producto registrada',
+            id: results.insertId
+        })
+    })
+})
+app.get('/marcas',(req,res)=>{
+    const sql = "SELECT * FROM marcas"
+
+    db.query(sql,(err,results)=>{
+        if(err){
+            return res.status(500).send({
+                success:false,
+                message:"Error al obtener marcas"
+            })
+        }
+
+        res.json(results)
+    })
+})
 //Se enviara el ID por la URL (endpoint)
 //Se enviara los datos por JSON
 /* app.put('/productos/:id',(req,res)=>{
