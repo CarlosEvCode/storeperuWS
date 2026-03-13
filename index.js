@@ -1,16 +1,17 @@
 const express = require('express'); //Framework
 const mysql = require('mysql2'); // Acceso BD
 const bodyParser = require('body-parser'); //Interactuar con JSON
+require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
 
 //Configuracion de acceso - .env
 const db = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: '',
-	database: 'storeperu',
+	host: process.env.DB_HOST || 'localhost',
+	user: process.env.DB_USER || 'root',
+	password: process.env.DB_PASSWORD || '',
+	database: process.env.DB_NAME || 'storeperu',
 });
 
 //Aperturar la conexion
@@ -20,7 +21,7 @@ db.connect((err) => {
 });
 
 //Iniciar el servidor
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 ///* SERVICIOS WEB */
 //VERBO = ACCION = INTENCION
