@@ -60,12 +60,16 @@ app.post('/productos', (req, res) => {
 	);
 });
 app.get('/productos', (req, res) => {
-	const sql = 'SELECT * FROM productos LIMIT 10';
+	const sql = `
+        SELECT p.*, m.nombreM AS nombre_marca 
+        FROM productos p 
+        INNER JOIN marcas m ON p.id_marca = m.id 
+        LIMIT 10
+    `;
 	db.query(sql, (err, results) => {
 		if (err) return res.status(500).send({message: 'Error acceso a datos'});
 		res.json(results);
 	});
-	/* res.send({'proceso': 'GET'}) */
 });
 // Actualizar producto por ID
 app.put('/productos/:id', (req, res) => {
